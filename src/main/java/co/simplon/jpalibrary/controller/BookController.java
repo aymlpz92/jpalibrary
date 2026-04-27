@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookController {
 
     @Autowired
@@ -21,10 +21,16 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable("id") final Long id) {
-        Optional<Book> book = bookService.getBook(id);
+    public Book getBookById(@PathVariable Long id) {
+        Optional<Book> book = bookService.getBookById(id);
         return book.orElse(null);
     }
+
+    @GetMapping("/title/{title}")
+    public Optional<Book> getBookByTitle(@PathVariable String title) {
+        return bookService.getBookByTitle(title);
+    }
+
 
     @PostMapping
     public Book createBook(@RequestBody Book book) {
@@ -32,8 +38,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public Book updateBook(@PathVariable("id") final Long id, @RequestBody Book book) {
-        Optional<Book> b = bookService.getBook(id);
+    public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
+        Optional<Book> b = bookService.getBookById(id);
         if(b.isPresent()) {
             Book currentBook = b.get();
 
@@ -47,8 +53,6 @@ public class BookController {
             return null;
         }
     }
-
-    @PatchMapping
 
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable("id") final Long id) {
